@@ -108,3 +108,54 @@ function AppendResolutionToUrl(url as string) as string
     return url + "&Resolution=" + m.top.getScene().currentDesignResolution.height.ToStr() + "p"
   end if
 end function
+
+rem *******************************************************
+rem * Registry Functions
+rem *******************************************************
+
+rem --
+rem -- RegistryRead(key, section)
+rem --
+rem -- Read a value from the registry.
+rem --
+rem -- @param section The section of the registry to read from.
+rem -- @param key The registry key to be read.
+rem -- @returns The value in the registry or invalid if not found.
+rem --
+function RegistryRead(section as string, key as string) as dynamic
+  sec = CreateObject("roRegistrySection", section)
+  if sec.Exists(key)
+    return sec.Read(key)
+  end if
+
+  return invalid
+end function
+
+rem --
+rem -- RegistryWrite(section, key, value)
+rem --
+rem -- Write a value to the registry.
+rem --
+rem -- @param section The section of the registry to write to.
+rem -- @param key The key name that will contain the value to write.
+rem -- @param value The value to be written to the registery.
+rem --
+sub RegistryWrite(section as string, key as string, value as string)
+  sec = CreateObject("roRegistrySection", section)
+  sec.Write(key, value)
+  sec.Flush()
+end sub
+
+rem --
+rem -- RegistryDelete(section, key)
+rem --
+rem -- Delete a value from the registry.
+rem --
+rem -- @param section The section of the registry to delete a value from.
+rem -- @param key The name of the key whose value will be deleted.
+rem --
+sub RegistryDelete(section as string, key as string)
+  sec = CreateObject("roRegistrySection", section)
+  sec.Delete(key)
+  sec.Flush()
+end sub
