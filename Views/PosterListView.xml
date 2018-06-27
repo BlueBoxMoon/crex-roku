@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component name="PosterListView" extends="Group" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://devtools.web.roku.com/schema/RokuSceneGraph.xsd">
+<component name="PosterListView" extends="BaseCrexView" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://devtools.web.roku.com/schema/RokuSceneGraph.xsd">
   <children>
     <Rectangle id="pBackgroundRect" color="0x323232FF" />
     <Poster id="pBackgroundImage" opacity="0.25" loadDisplayMode="scaleToFill" />
@@ -19,7 +19,6 @@
 
   <interface>
     <field id="uri" type="string" onChange="onUriChange" />
-    <field id="mainScene" type="node" />
   </interface>
 
   <script type="text/brightscript" uri="PosterListView.brs" />

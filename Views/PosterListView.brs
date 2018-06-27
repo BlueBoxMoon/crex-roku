@@ -124,7 +124,7 @@ sub onUriChange()
   rem --
   rem -- Set the URL for the task to pull content from and start it.
   rem --
-  m.task.url = m.top.uri
+  m.task.url = AppendResolutionToUrl(m.top.uri)
   m.task.control = "RUN"
 end sub
 
@@ -210,5 +210,5 @@ rem --
 sub onItemSelectedChange()
   item = m.config.Items[m.llMenu.itemSelected]
 
-  m.top.mainScene.callFunc("ShowItem", item)
+  m.top.crexScene.callFunc("ShowItem", item)
 end sub

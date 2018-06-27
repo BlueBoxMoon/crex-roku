@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component name="VideoView" extends="Group" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://devtools.web.roku.com/schema/RokuSceneGraph.xsd">
+<component name="VideoView" extends="BaseCrexView" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://devtools.web.roku.com/schema/RokuSceneGraph.xsd">
   <children>
     <Rectangle id="rBackground" color="0x121212FF" />
     <Group id="gResume" visible="false">
@@ -16,7 +16,6 @@
 
   <interface>
     <field id="uri" type="string" onChange="onUriChange" />
-    <field id="mainScene" type="node" />
   </interface>
 
   <script type="text/brightscript" uri="VideoView.brs" />
