@@ -14,6 +14,14 @@ sub init()
   m.vVideo = m.top.findNode("vVideo")
 
   rem --
+  rem -- Set configuration options.
+  rem --
+  config = ReadCache(m, "config")
+  m.vVideo.trickPlayBar.filledBarBlendColor = config.VideoPlayer.FilledBarBlendColor
+  m.vVideo.bufferingBar.filledBarBlendColor = config.VideoPlayer.FilledBarBlendColor
+  m.vVideo.retrievingBar.filledBarBlendColor = config.VideoPlayer.FilledBarBlendColor
+
+  rem --
   rem -- Configure common resolution options for the view.
   rem --
   resolution = m.top.getScene().currentDesignResolution
@@ -138,9 +146,12 @@ rem -- @param press True if the key was pressed, false if it was released.
 rem -- @returns True if the key was handled, false otherwise.
 rem --
 function onKeyEvent(key as string, press as boolean) as boolean
-  if press = true and key = "back" and m.vVideo.duration > 60
-    lastVideoState = m.top.uri + "|" + Int(m.vVideo.position).ToStr()
-    WriteCache(m, "lastVideoState", lastVideoState)
+  if press = true and key = "back"
+    if m.vVideo.duration > 60
+      lastVideoState = m.top.uri + "|" + Int(m.vVideo.position).ToStr()
+      WriteCache(m, "lastVideoState", lastVideoState)
+    end if
+
     m.vVideo.control = "stop"
   end if
 

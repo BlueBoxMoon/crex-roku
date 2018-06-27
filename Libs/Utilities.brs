@@ -23,6 +23,16 @@ function ReadCrexConfig() as object
   end if
 
   rem --
+  rem -- Add in any missing Video Player configuration options.
+  rem --
+  if config.VideoPlayer = invalid
+    config.VideoPlayer = {}
+  end if
+  if config.VideoPlayer.ProgressColorTint = invalid
+    config.VideoPlayer.ProgressColorTint = "0xFFFFFFFF"
+  end if
+  
+  rem --
   rem -- Add in any missing MenuBar default configuration options.
   rem --
   if config.MenuBar = invalid
