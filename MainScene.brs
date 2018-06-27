@@ -34,6 +34,7 @@ sub init()
   rem -- Configure any customized settings.
   rem --
   m.bsLoading.uri = crex.LoadingSpinner
+  m.mbMenuBar.color = crex.MenuBar.BackgroundColor
 
   rem --
   rem -- Configure UI elements for the screen size we are running.

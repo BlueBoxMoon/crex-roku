@@ -19,8 +19,13 @@ sub init()
   rem --
   config = ReadCache(m, "config")
   m.pLeft.uri = config.MenuBar.ButtonLeftImage
+  m.pLeft.blendColor = config.MenuBar.FocusedBlendColor
   m.pCenter.uri = config.MenuBar.ButtonMiddleImage
+  m.pCenter.blendColor = config.MenuBar.FocusedBlendColor
   m.pRight.uri = config.MenuBar.ButtonRightImage
+  m.pRight.blendColor = config.MenuBar.FocusedBlendColor
+  m.focusedTextColor = config.MenuBar.FocusedTextColor
+  m.unfocusedTextColor = config.MenuBar.UnfocusedTextColor
 
   rem --
   rem -- Observe the fields we need to monitor for changes.
@@ -87,6 +92,11 @@ sub onSizeChange()
   rem -- much space this button is taking up.
   rem --
   m.top.boundingWidth = m.pLeft.width + m.pCenter.width + m.pRight.width
+
+  rem --
+  rem -- Make sure all the colors and such are set.
+  rem --
+  onFocusedChildChange()
 end sub
 
 rem --
@@ -98,7 +108,9 @@ rem --
 sub onFocusedChildChange()
   if m.top.HasFocus()
     m.gActive.visible = true
+    m.lblText.color = m.FocusedTextColor
   else
     m.gActive.visible = false
+    m.lblText.color = m.UnfocusedTextColor
   end if
 end sub

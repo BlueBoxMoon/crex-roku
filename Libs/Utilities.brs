@@ -31,12 +31,24 @@ function ReadCrexConfig() as object
   if config.VideoPlayer.ProgressColorTint = invalid
     config.VideoPlayer.ProgressColorTint = "0xFFFFFFFF"
   end if
-  
+
   rem --
   rem -- Add in any missing MenuBar default configuration options.
   rem --
   if config.MenuBar = invalid
     config.MenuBar = {}
+  end if
+  if config.MenuBar.BackgroundColor = invalid
+    config.MenuBar.BackgroundColor = "0x121212B2"
+  end if
+  if config.MenuBar.FocusedTextColor = invalid
+    config.MenuBar.FocusedTextColor = "0xDDDDDDFF"
+  end if
+  if config.MenuBar.UnfocusedTextColor = invalid
+    config.MenuBar.UnfocusedTextColor = "0xDDDDDDFF"
+  end if
+  if config.MenuBar.FocusedBlendColor = invalid
+    config.MenuBar.FocusedBlendColor = "0xFFFFFFFF"
   end if
   if config.MenuBar.ButtonLeftImage = invalid
     config.MenuBar.ButtonLeftImage = root + "Images/ButtonLeftEdge.png"
