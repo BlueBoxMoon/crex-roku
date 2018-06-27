@@ -17,7 +17,7 @@ sub init()
   rem --
   rem -- Configure the button images.
   rem --
-  config = ReadConfig()
+  config = ReadCache(m, "config")
   m.pLeft.uri = config.MenuBar.ButtonLeftImage
   m.pCenter.uri = config.MenuBar.ButtonMiddleImage
   m.pRight.uri = config.MenuBar.ButtonRightImage

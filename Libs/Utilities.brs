@@ -1,10 +1,10 @@
 rem --
-rem -- ReadConfig()
+rem -- ReadCrexConfig()
 rem --
 rem -- Read the configuration file specified in the manifest.
 rem --
 rem -- @returns An object representing the JSON config file.
-function ReadConfig() as object
+function ReadCrexConfig() as object
   appInfo = CreateObject("roAppInfo")
   configPath = appInfo.GetValue("app_config")
   if configPath = invalid or configPath = ""
@@ -13,7 +13,6 @@ function ReadConfig() as object
   json = ReadAsciiFile(configPath)
 
   config = ParseJSON(json)
-  rem TODO: Cache this
   root = GetCrexRoot()
 
   rem --
@@ -77,6 +76,49 @@ function FindPathToFile(path as string, filename as string) as string
   end for
 
   return ""
+end function
+
+rem --
+rem -- WriteCache(m, key, value)
+rem --
+rem -- Writes a value to the application cache. Only small amounts of
+rem -- data should be stored in cache.
+rem --
+rem -- @param m The m object associated with the component.
+rem -- @param key The key name for the cache value.
+rem -- @param value The value to be written into the cache.
+rem --
+sub WriteCache(m as object, key as string, value as dynamic)
+  if m.global.hasField("_crexCache") = false
+    m.global.addFields({_crexCache: CreateObject("roSGNode", "ContentNode")})
+  end if
+
+  if m.global._crexCache.hasField("_" + key) = false
+    fields = {}
+    fields["_" + key] = value
+    m.global._crexCache.addFields(fields)
+  end if
+
+  m.global._crexCache.setField("_" + key, value)
+end sub
+
+rem --
+rem -- ReadCache(m, key)
+rem --
+rem -- Reads a value from the cache and returns it.
+rem --
+rem -- @param m The m object associated with the component.
+rem -- @param key The key name for the cached value.
+rem -- @returns The previously stored value or invalid if none.
+rem --
+function ReadCache(m as object, key as string) as dynamic
+  if m.global.hasField("_crexCache")
+    if m.global._crexCache.hasField("_" + key)
+      return m.global._crexCache.getField("_" + key)
+    end if
+  end if
+
+  return invalid
 end function
 
 rem --

@@ -20,9 +20,14 @@ sub init()
   m.config = invalid
 
   rem --
+  rem -- Load the config file and cache it.
+  rem --
+  crex = ReadCrexConfig()
+  WriteCache(m, "config", crex)
+
+  rem --
   rem -- Set the Application Root URL to use.
   rem --
-  crex = ReadConfig()
   m.AppRootUrl = AppendResolutionToUrl(crex.ApplicationRootUrl)
 
   rem --

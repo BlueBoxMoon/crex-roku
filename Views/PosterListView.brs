@@ -26,7 +26,7 @@ sub init()
   rem --
   rem -- Configure customized options.
   rem --
-  crex = ReadConfig()
+  crex = ReadCache(m, "config")
   m.bsLoading.uri = crex.LoadingSpinner
 
   rem --
