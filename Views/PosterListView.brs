@@ -24,6 +24,12 @@ sub init()
   m.task = invalid
 
   rem --
+  rem -- Configure customized options.
+  rem --
+  crex = ReadConfig()
+  m.bsLoading.uri = crex.LoadingSpinner
+
+  rem --
   rem -- Configure common resolution options for the view.
   rem --
   resolution = m.top.getScene().currentDesignResolution

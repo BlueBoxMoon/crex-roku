@@ -14,7 +14,7 @@
       <ContentNode id="cnMenuContent" role="content" />
     </LabelList>
 
-    <BusySpinner id="bsLoading" uri="pkg:/images/spinner.png" />
+    <BusySpinner id="bsLoading" />
   </children>
 
   <interface>

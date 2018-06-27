@@ -2,9 +2,9 @@
 <component name="MenuButton" extends="Group" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://devtools.web.roku.com/schema/RokuSceneGraph.xsd">
   <children>
     <Group id="gActive" visible="false">
-      <Poster id="pLeft" uri="pkg:/images/ButtonLeftEdge.png" loadDisplayMode="scaleToFill" />
-      <Poster id="pCenter" uri="pkg:/images/ButtonMiddle.png" loadDisplayMode="scaleToFill" />
-      <Poster id="pRight" uri="pkg:/images/ButtonRightEdge.png" loadDisplayMode="scaleToFill" />
+      <Poster id="pLeft" loadDisplayMode="scaleToFill" />
+      <Poster id="pCenter" loadDisplayMode="scaleToFill" />
+      <Poster id="pRight" loadDisplayMode="scaleToFill" />
     </Group>
     <Label id="lblText" horizAlign="center" vertAlign="center" width="0" text="Test" />
   </children>
@@ -18,4 +18,5 @@
   </interface>
 
   <script type="text/brightscript" uri="MenuButton.brs" />
+  <script type="text/brightscript" uri="../Libs/Utilities.brs" />
 </component>

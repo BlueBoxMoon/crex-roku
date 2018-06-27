@@ -22,7 +22,13 @@ sub init()
   rem --
   rem -- Set the Application Root URL to use.
   rem --
-  m.AppRootUrl = AppendResolutionToUrl(ReadConfig().ApplicationRootUrl)
+  crex = ReadConfig()
+  m.AppRootUrl = AppendResolutionToUrl(crex.ApplicationRootUrl)
+
+  rem --
+  rem -- Configure any customized settings.
+  rem --
+  m.bsLoading.uri = crex.LoadingSpinner
 
   rem --
   rem -- Configure UI elements for the screen size we are running.

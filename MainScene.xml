@@ -8,7 +8,7 @@
 
     <Group id="gViews" />
 
-    <BusySpinner id="bsLoading" uri="pkg:/images/spinner.png" />
+    <BusySpinner id="bsLoading" />
     <Animation id="aFadeMenu" duration="0.70" repeat="false" easeFunction="linear">
       <FloatFieldInterpolator id="aFadeMenuValue" key="[0.0, 0.5, 1.0]" keyValue="[0, 1, 1]" fieldToInterp="gMainMenu.opacity" />
       <FloatFieldInterpolator id="aFadeMenuValue2" key="[0.0, 0.5, 1.0]" keyValue="[1, 1, 0]" fieldToInterp="bsLoading.opacity" />

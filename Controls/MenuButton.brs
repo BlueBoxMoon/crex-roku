@@ -15,6 +15,14 @@ sub init()
   m.pRight = m.gActive.findNode("pRight")
 
   rem --
+  rem -- Configure the button images.
+  rem --
+  config = ReadConfig()
+  m.pLeft.uri = config.MenuBar.ButtonLeftImage
+  m.pCenter.uri = config.MenuBar.ButtonMiddleImage
+  m.pRight.uri = config.MenuBar.ButtonRightImage
+
+  rem --
   rem -- Observe the fields we need to monitor for changes.
   rem --
   m.top.observeField("focusedChild", "onFocusedChildChange")
