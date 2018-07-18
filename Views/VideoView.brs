@@ -133,6 +133,8 @@ sub onItemSelectedChange()
   else
     PlayVideo()
   end if
+
+  m.vVideo.SetFocus(true)
 end sub
 
 rem --
