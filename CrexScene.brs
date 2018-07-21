@@ -40,6 +40,8 @@ sub init()
   rem -- Configure UI elements for the screen size we are running.
   rem --
   resolution = m.top.getScene().currentDesignResolution
+  m.pBackground.width = resolution.width
+  m.pBackground.height = resolution.height
   if resolution.resolution = "FHD"
     rem --
     rem -- Configure for 1920x1080.
