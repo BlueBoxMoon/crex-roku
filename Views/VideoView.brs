@@ -16,10 +16,10 @@ sub init()
   rem --
   rem -- Set configuration options.
   rem --
-  config = ReadCache(m, "config")
-  m.vVideo.trickPlayBar.filledBarBlendColor = config.VideoPlayer.FilledBarBlendColor
-  m.vVideo.bufferingBar.filledBarBlendColor = config.VideoPlayer.FilledBarBlendColor
-  m.vVideo.retrievingBar.filledBarBlendColor = config.VideoPlayer.FilledBarBlendColor
+  m.config = ReadCache(m, "config")
+  m.vVideo.trickPlayBar.filledBarBlendColor = m.config.VideoPlayer.FilledBarBlendColor
+  m.vVideo.bufferingBar.filledBarBlendColor = m.config.VideoPlayer.FilledBarBlendColor
+  m.vVideo.retrievingBar.filledBarBlendColor = m.config.VideoPlayer.FilledBarBlendColor
 
   rem --
   rem -- Configure common resolution options for the view.
@@ -64,6 +64,12 @@ sub PlayVideo(startPosition = 0 as integer)
   rem --
   m.gResume.visible = false
   m.vVideo.visible = true
+  if UCase(m.top.uri).Instr("YOURSTREAMLIVE.COM") <> -1
+    capath = m.config.CrexRoot + "yourstreamlive.crt"
+    m.vVideo.SetCertificatesFile(capath)
+  else
+    m.vVideo.SetCertificatesFile("common:/certs/ca-bundle.crt")
+  end if
   m.vVideo.content = videoContent
   m.vVideo.seek = startPosition
   m.vVideo.control = "play"
@@ -83,7 +89,7 @@ sub onUriChange()
   rem --
   rem -- Determine if this is an HLS or MP4 style video link.
   rem --
-  if m.top.uri.Instr("m3u8") <> -1 or m.top.uri.Instr("M3u8") <> -1 or m.top.uri.Instr("m3U8") <> -1 or m.top.uri.Instr("M3U8")
+  if UCase(m.top.uri).Instr("M3U8") <> -1 or Right(UCase(m.top.uri), 3) = "HLS"
     m.format = "hls"
   else
     m.format = "mp4"
