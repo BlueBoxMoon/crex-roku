@@ -43,6 +43,7 @@ sub init()
   rem --
   m.top.observeField("focusedChild", "onFocusedChildChange")
   m.llResume.observeField("itemSelected", "onItemSelectedChange")
+  m.vVideo.observeField("state", "onStateChange")
 end sub
 
 rem --
@@ -141,6 +142,21 @@ sub onItemSelectedChange()
   end if
 
   m.vVideo.SetFocus(true)
+end sub
+
+rem --
+rem -- onStateChange()
+rem --
+rem -- The state for the video has changed. If it has finished then pop us
+rem -- back to the parent view.
+rem --
+sub onStateChange()
+  rem --
+  rem -- Determine if this is an HLS or MP4 style video link.
+  rem --
+  if m.vVideo.state = "finished"
+    m.top.crexScene.callFunc("PopActiveView")
+  end if
 end sub
 
 rem --

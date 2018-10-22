@@ -17,6 +17,7 @@
   </children>
 
   <interface>
+    <function name="PopActiveView" />
     <function name="PlayVideo" />
     <function name="ShowItem" />
   </interface>
