@@ -46,9 +46,9 @@ sub init()
     rem --
     rem -- Configure for 1920x1080.
     rem --
-    m.mbMenuBar.translation = [0, 1000]
+    m.mbMenuBar.translation = [0, 960]
     m.mbMenuBar.width = 1920
-    m.mbMenuBar.height = 80
+    m.mbMenuBar.height = 120
     m.bsLoading.translation = [912, 492]
     m.bsLoading.poster.width = 96
     m.bsLoading.poster.height = 96
@@ -56,9 +56,9 @@ sub init()
     rem --
     rem -- Configure for 1280x720.
     rem --
-    m.mbMenuBar.translation = [0, 670]
+    m.mbMenuBar.translation = [0, 640]
     m.mbMenuBar.width = 1280
-    m.mbMenuBar.height = 50
+    m.mbMenuBar.height = 80
     m.bsLoading.translation = [592, 312]
     m.bsLoading.poster.width = 96
     m.bsLoading.poster.height = 96
@@ -221,7 +221,13 @@ sub ShowItem(item as Object)
 
     view = CreateObject("roSGNode", item.Template)
     view.crexScene = m.top
-    view.uri = url
+    if item.Template = "ImageView"
+      view = CreateObject("roSGNode", "VideoView")
+      view.crexScene = m.top
+      view.uri = "https://yourstreamlive.com/live/4706/hls"
+    else
+      view.uri = url
+    end if
     PushView(view)
     return
     if item.Template = "Video"
