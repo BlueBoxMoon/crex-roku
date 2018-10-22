@@ -13,13 +13,13 @@ function ReadCrexConfig() as object
   json = ReadAsciiFile(configPath)
 
   config = ParseJSON(json)
-  root = GetCrexRoot()
+  config.CrexRoot = GetCrexRoot()
 
   rem --
   rem -- Add in any root config elements.
   rem --
   if config.LoadingSpinner = invalid
-    config.LoadingSpinner = root + "Images/spinner.png"
+    config.LoadingSpinner = config.CrexRoot + "Images/spinner.png"
   end if
 
   rem --
@@ -51,13 +51,13 @@ function ReadCrexConfig() as object
     config.MenuBar.FocusedBlendColor = "0xFFFFFFFF"
   end if
   if config.MenuBar.ButtonLeftImage = invalid
-    config.MenuBar.ButtonLeftImage = root + "Images/ButtonLeftEdge.png"
+    config.MenuBar.ButtonLeftImage = config.CrexRoot + "Images/ButtonLeftEdge.png"
   end if
   if config.MenuBar.ButtonMiddleImage = invalid
-    config.MenuBar.ButtonMiddleImage = root + "Images/ButtonMiddle.png"
+    config.MenuBar.ButtonMiddleImage = config.CrexRoot + "Images/ButtonMiddle.png"
   end if
   if config.MenuBar.ButtonRightImage = invalid
-    config.MenuBar.ButtonRightImage = root + "Images/ButtonRightEdge.png"
+    config.MenuBar.ButtonRightImage = config.CrexRoot + "Images/ButtonRightEdge.png"
   end if
 
   return config
