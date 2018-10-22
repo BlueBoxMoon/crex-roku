@@ -221,44 +221,8 @@ sub ShowItem(item as Object)
 
     view = CreateObject("roSGNode", item.Template)
     view.crexScene = m.top
-    if item.Template = "ImageView"
-      view = CreateObject("roSGNode", "VideoView")
-      view.crexScene = m.top
-      view.uri = "https://yourstreamlive.com/live/4706/hls"
-    else
-      view.uri = url
-    end if
+    view.uri = url
     PushView(view)
-    return
-    if item.Template = "Video"
-      rem --
-      rem -- Play a video.
-      rem --
-      LogMessage("Showing Video: " + url)
-
-      PlayVideo(url)
-    else if item.Template = "Image"
-      rem --
-      rem -- Show an image.
-      rem --
-      LogMessage("Showing Image: " + url)
-
-      view = CreateObject("roSGNode", "ImageView")
-      view.uri = url
-      view.crexScene = m.top
-      PushView(view)
-    else if item.Template = "PosterList"
-      rem --
-      rem -- Show a Poster List sub-menu.
-      rem --
-      url = AppendResolutionToUrl(url)
-      LogMessage("Showing PosterList: " + url)
-
-      view = CreateObject("roSGNode", "PosterListView")
-      view.uri = url
-      view.crexScene = m.top
-      PushView(view)
-    end if
   end if
 end sub
 
