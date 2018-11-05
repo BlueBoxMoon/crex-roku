@@ -10,13 +10,7 @@ sub init()
   rem -- Set initial control values.
   rem --
   m.gViews = m.top.findNode("gViews")
-  m.aFadeMenu = m.top.findNode("aFadeMenu")
   m.aFadeView = m.top.findNode("aFadeView")
-  m.gMainMenu = m.top.findNode("gMainMenu")
-  m.bsLoading = m.top.findNode("bsLoading")
-  m.gMenuBar = m.top.findNode("gMenuBar")
-  m.pBackground = m.top.findNode("pBackground")
-  m.mbMenuBar = m.top.findNode("mbMenuBar")
   m.config = invalid
 
   rem --
@@ -26,63 +20,21 @@ sub init()
   WriteCache(m, "config", crex)
 
   rem --
-  rem -- Set the Application Root URL to use.
+  rem -- Set configured values
   rem --
-  m.AppRootUrl = AppendResolutionToUrl(crex.ApplicationRootUrl)
-
-  rem --
-  rem -- Configure any customized settings.
-  rem --
-  m.bsLoading.uri = crex.LoadingSpinner
-  m.mbMenuBar.color = crex.MenuBar.BackgroundColor
-
-  rem --
-  rem -- Configure UI elements for the screen size we are running.
-  rem --
-  resolution = m.top.getScene().currentDesignResolution
-  m.pBackground.width = resolution.width
-  m.pBackground.height = resolution.height
-  if resolution.resolution = "FHD"
-    rem --
-    rem -- Configure for 1920x1080.
-    rem --
-    m.mbMenuBar.translation = [0, 960]
-    m.mbMenuBar.width = 1920
-    m.mbMenuBar.height = 120
-    m.bsLoading.translation = [912, 492]
-    m.bsLoading.poster.width = 96
-    m.bsLoading.poster.height = 96
-  else
-    rem --
-    rem -- Configure for 1280x720.
-    rem --
-    m.mbMenuBar.translation = [0, 640]
-    m.mbMenuBar.width = 1280
-    m.mbMenuBar.height = 80
-    m.bsLoading.translation = [592, 312]
-    m.bsLoading.poster.width = 96
-    m.bsLoading.poster.height = 96
-  end if
+  m.aFadeView.duration = crex.AnimationTime
 
   rem --
   rem -- Observe the fields we need to monitor for changes.
   rem --
-  m.pBackground.observeField("loadStatus", "onBackgroundStatus")
-  m.mbMenuBar.observeField("selectedButtonIndex", "onSelectedButtonIndex")
-  m.aFadeMenu.observeField("state", "onFadeMenuState")
   m.aFadeView.observeField("state", "onFadeViewState")
 
-  LogMessage("Launching with Root URL: " + m.AppRootUrl)
+  LogMessage("Launching with Root URL: " + crex.ApplicationRootUrl)
 
   rem --
-  rem -- Show the loading spinner and begin the task to load the
-  rem -- Application Root URL.
+  rem -- Default template and root url.
   rem --
-  m.bsLoading.control = "start"
-  m.task = CreateObject("roSGNode", "URLTask")
-  m.task.url = m.AppRootUrl
-  m.task.observeField("content", "onContentChanged")
-  m.task.control = "RUN"
+  ShowItem({Template: crex.ApplicationRootTemplate, Data: crex.ApplicationRootUrl})
 end sub
 
 rem *******************************************************
@@ -191,18 +143,6 @@ sub PopActiveView()
 end sub
 
 rem --
-rem -- PlayVideo(url)
-rem --
-rem -- Creates a new Video view and pushes it to the top of the view
-rem -- stack.
-rem --
-rem -- @param url The URL of the video that will be played.
-rem --
-sub PlayVideo(url as string)
-  ShowItem({Template: "VideoView", Url: url})
-end sub
-
-rem --
 rem -- ShowItem(item)
 rem --
 rem -- Shows an item on screen by parsing the object data and
@@ -214,14 +154,13 @@ sub ShowItem(item as Object)
   rem --
   rem -- Each item should have a Template and Url property.
   rem --
-  if item.Template <> invalid and item.Url <> invalid and item.Url <> ""
-    url = item.Url
+  LogMessage(FormatJson(item))
+  if item.Template <> invalid and item.Data <> invalid
+    LogMessage("Navigation to " + item.Template)
 
-    LogMessage("Navigation to " + item.Template + ": " + item.Url)
-
-    view = CreateObject("roSGNode", item.Template)
+    view = CreateObject("roSGNode", item.Template + "View")
     view.crexScene = m.top
-    view.uri = url
+    view.data = FormatJson(item.Data)
     PushView(view)
   end if
 end sub
@@ -229,83 +168,6 @@ end sub
 rem *******************************************************
 rem ** EVENT HANDLERS
 rem *******************************************************
-
-rem --
-rem -- onContentChanged()
-rem --
-rem -- The URL download task has finished and provided content for
-rem -- use to parse. We then populate the UI with the information.
-rem --
-sub onContentChanged()
-  rem --
-  rem -- Try to parse the retrieved content as JSON.
-  rem --
-  m.config = invalid
-  if m.task.success = true
-    m.config = parseJSON(m.task.content)
-  end if
-
-  if m.config <> invalid
-    rem --
-    rem -- Configure UI elements with the configuration options.
-    rem --
-    m.pBackground.uri = m.config.BackgroundUrl
-
-    rem --
-    rem -- Build a list of buttons provided in the config.
-    rem --
-    buttons = []
-    for each b in m.config.buttons
-      buttons.Push(b.Title)
-    end for
-
-    rem --
-    rem -- Set the menu bar's buttons to those we found in the config.
-    rem --
-    m.mbMenuBar.buttons = buttons
-  else
-    LogMessage("Failed to load main scene content.")
-  end if
-end sub
-
-rem --
-rem -- onBackgroundStatus()
-rem --
-rem -- Called once the background image has finished loading. At this
-rem -- point we can show the menu bar and hide the loading spinner.
-rem --
-sub onBackgroundStatus()
-  rem --
-  rem -- Verify that the image either loaded or failed. We don't want
-  rem -- to activate during the loading state.
-  rem --
-  if m.pBackground.loadStatus = "ready" or m.pBackground.loadStatus = "failed"
-    rem --
-    rem -- Prepare the main menu controls for fading in.
-    rem --
-    m.gMainMenu.opacity = 0
-    m.gMainMenu.visible = true
-    m.mbMenuBar.setFocus(true)
-
-    rem --
-    rem -- Start fading in the menu and fading out the spinner.
-    rem --
-    m.aFadeMenu.control = "start"
-  end if
-end sub
-
-rem --
-rem -- onFadeMenuState()
-rem --
-rem -- The menu fade animation has completed. Make sure the spinner
-rem -- is stopped and no longer visible at all.
-rem --
-sub onFadeMenuState()
-  if m.aFadeMenu.state = "stopped"
-    m.bsLoading.control = "stop"
-    m.bsLoading.visible = false
-  end if
-end sub
 
 rem --
 rem -- onFadeViewState()
@@ -332,11 +194,7 @@ sub onFadeViewState()
       rem -- Set the focus to either the previous view on the stack
       rem -- or the main menu bar if no views remain.
       rem --
-      if m.gViews.getChildCount() > 0
-        m.gViews.getChild(m.gViews.getChildCount() - 1).setFocus(true)
-      else
-        m.mbMenuBar.setFocus(true)
-      end if
+      m.gViews.getChild(m.gViews.getChildCount() - 1).setFocus(true)
     end if
   end if
 end sub
@@ -367,7 +225,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
       rem -- the stack, then pop the active view. Otherwise allow
       rem -- the back button to exit out of the app.
       rem --
-      if m.gViews.getChildCount() > 0
+      if m.gViews.getChildCount() > 1
         PopActiveView()
 
         return true
@@ -379,15 +237,3 @@ function onKeyEvent(key as string, press as boolean) as boolean
 
   return false
 end function
-
-rem --
-rem -- onSelectedButtonIndex()
-rem --
-rem -- A menu button has been selected. Show the selected item on
-rem -- the screen.
-rem --
-sub onSelectedButtonIndex()
-  item = m.config.Buttons[m.mbMenuBar.selectedButtonIndex]
-
-  ShowItem(item)
-end sub

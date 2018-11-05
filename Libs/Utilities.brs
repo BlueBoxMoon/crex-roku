@@ -21,6 +21,12 @@ function ReadCrexConfig() as object
   if config.LoadingSpinner = invalid
     config.LoadingSpinner = config.CrexRoot + "Images/spinner.png"
   end if
+  if config.ApplicationRootTemplate = invalid
+    config.ApplicationRootTemplate = "Menu"
+  end if
+  if config.AnimationTime = invalid
+    config.AnimationTime = 0.25
+  end if
 
   rem --
   rem -- Add in any missing Video Player configuration options.
@@ -28,8 +34,8 @@ function ReadCrexConfig() as object
   if config.VideoPlayer = invalid
     config.VideoPlayer = {}
   end if
-  if config.VideoPlayer.ProgressColorTint = invalid
-    config.VideoPlayer.ProgressColorTint = "0xFFFFFFFF"
+  if config.VideoPlayer.FilledBarBlendColor = invalid
+    config.VideoPlayer.FilledBarBlendColor = "0x808080FF"
   end if
 
   rem --
@@ -45,19 +51,7 @@ function ReadCrexConfig() as object
     config.MenuBar.FocusedTextColor = "0xDDDDDDFF"
   end if
   if config.MenuBar.UnfocusedTextColor = invalid
-    config.MenuBar.UnfocusedTextColor = "0xDDDDDDFF"
-  end if
-  if config.MenuBar.FocusedBlendColor = invalid
-    config.MenuBar.FocusedBlendColor = "0xFFFFFFFF"
-  end if
-  if config.MenuBar.ButtonLeftImage = invalid
-    config.MenuBar.ButtonLeftImage = config.CrexRoot + "Images/ButtonLeftEdge.png"
-  end if
-  if config.MenuBar.ButtonMiddleImage = invalid
-    config.MenuBar.ButtonMiddleImage = config.CrexRoot + "Images/ButtonMiddle.png"
-  end if
-  if config.MenuBar.ButtonRightImage = invalid
-    config.MenuBar.ButtonRightImage = config.CrexRoot + "Images/ButtonRightEdge.png"
+    config.MenuBar.UnfocusedTextColor = "0x808080FF"
   end if
 
   return config
@@ -171,6 +165,26 @@ function AppendResolutionToUrl(url as string) as string
   else
     return url + "&Resolution=" + m.top.getScene().currentDesignResolution.height.ToStr() + "p"
   end if
+end function
+
+rem --
+rem -- BestMatchingUrl(urlset)
+rem --
+function BestMatchingUrl(urlset as object) as string
+  height = m.top.getScene().currentDesignResolution.height
+  if height >= 2160
+    images = [urlset.UHD, urlset.FHD, urlset.HD]
+  else if height >= 1080
+    images = [urlset.FHD, urlset.HD, urlset.UHD]
+  else
+    images = [urlset.HD, urlset.FHD, urlset.UHD]
+  end if
+
+  for i=0 to images.count() step 1
+    if type(images[i]) = "String"
+      return images[i]
+    end if
+  end for
 end function
 
 rem *******************************************************

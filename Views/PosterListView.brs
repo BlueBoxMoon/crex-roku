@@ -21,6 +21,8 @@ sub init()
   m.lItemDetailRight = m.top.findNode("lItemDetailRight")
   m.lItemDescription = m.top.findNode("lItemDescription")
   m.bsLoading = m.top.findNode("bsLoading")
+  m.aFadeSpinner = m.top.findNode("aFadeSpinner")
+  m.aFadeBackground = m.top.findNode("aFadeBackground")
   m.task = invalid
 
   rem --
@@ -28,6 +30,8 @@ sub init()
   rem --
   crex = ReadCache(m, "config")
   m.bsLoading.uri = crex.LoadingSpinner
+  m.aFadeSpinner.duration = crex.AnimationTime
+  m.aFadeBackground.duration = crex.AnimationTime
 
   rem --
   rem -- Configure common resolution options for the view.
@@ -37,8 +41,8 @@ sub init()
   m.pBackgroundRect.height = resolution.height
   m.pBackgroundImage.width = resolution.width
   m.pBackgroundImage.height = resolution.height
-  m.pBackgroundImage.loadWidth = resolution.width * 0.02
-  m.pBackgroundImage.loadHeight = resolution.height * 0.02
+  m.pBackgroundImage.loadWidth = resolution.width * 0.04
+  m.pBackgroundImage.loadHeight = resolution.height * 0.04
   m.bsLoading.poster.width = 96
   m.bsLoading.poster.height = 96
 
@@ -53,17 +57,17 @@ sub init()
     m.lTitle.translation = [80, 60]
     m.lTitle.width = 1760
     m.pItemImage.width = 800
-    m.pItemImage.height = 495
+    m.pItemImage.height = 450
     m.pItemImage.translation = [80, 200]
     m.lItemDetailLeft.width = 400
     m.lItemDetailLeft.height = 40
-    m.lItemDetailLeft.translation = [80, 700]
+    m.lItemDetailLeft.translation = [80, 655]
     m.lItemDetailRight.width = 400
     m.lItemDetailRight.height = 40
-    m.lItemDetailRight.translation = [480, 700]
+    m.lItemDetailRight.translation = [480, 655]
     m.lItemDescription.width = 800
-    m.lItemDescription.height = 240
-    m.lItemDescription.translation = [80, 760]
+    m.lItemDescription.height = 280
+    m.lItemDescription.translation = [80, 715]
     m.llMenu.translation = [1050, 200]
     m.llMenu.itemSize = [750, 48]
     m.llMenu.itemSpacing = [0, 12]
@@ -95,6 +99,7 @@ sub init()
   rem -- Observe the fields we need to monitor for changes.
   rem --
   m.top.observeField("focusedChild", "onFocusedChildChange")
+  m.pBackgroundImage.observeField("loadStatus", "onBackgroundStatus")
   m.llMenu.observeField("itemFocused", "onItemFocusedChange")
   m.llMenu.observeField("itemSelected", "onItemSelectedChange")
 end sub
@@ -104,13 +109,13 @@ rem ** EVENT HANDLERS
 rem *******************************************************
 
 rem --
-rem -- onUriChange()
+rem -- onDataChange()
 rem --
-rem -- The URI value has changed. This indicates the URL we should
+rem -- The data value has changed. This indicates the URL we should
 rem -- pull our configuration information from. We need to re-download
 rem -- the configuration and apply it to the display elements.
 rem --
-sub onUriChange()
+sub onDataChange()
   rem --
   rem -- Create a new task or re-use an existing one.
   rem --
@@ -124,7 +129,7 @@ sub onUriChange()
   rem --
   rem -- Set the URL for the task to pull content from and start it.
   rem --
-  m.task.url = AppendResolutionToUrl(m.top.uri)
+  m.task.url = ParseJson(m.top.data)
   m.task.control = "RUN"
 end sub
 
@@ -148,7 +153,7 @@ sub onContentChange()
     rem -- Set the text and background image for the list.
     rem --
     m.lTitle.text = m.config.Title
-    m.pBackgroundImage.uri = m.config.Image
+    m.pBackgroundImage.uri = BestMatchingUrl(m.config.BackgroundImage)
 
     rem --
     rem -- Remove all the old menu items.
@@ -172,6 +177,27 @@ sub onContentChange()
     m.bsLoading.visible = false
   else
     LogMessage("Failed to load PosterList content")
+  end if
+end sub
+
+rem --
+rem -- onBackgroundStatus()
+rem --
+rem -- Called once the background image has finished loading. At this
+rem -- point we can show the menu bar and hide the loading spinner.
+rem --
+sub onBackgroundStatus()
+  rem --
+  rem -- Verify that the image either loaded or failed. We don't want
+  rem -- to activate during the loading state.
+  rem --
+  if m.pBackgroundImage.loadStatus = "ready" or m.pBackgroundImage.loadStatus = "failed"
+    rem --
+    rem -- Fade the background image in.
+    rem --
+    m.pBackgroundImage.opacity = 0
+    m.pBackgroundImage.visible = true
+    m.aFadeBackground.control = "start"
   end if
 end sub
 
@@ -210,5 +236,5 @@ rem --
 sub onItemSelectedChange()
   item = m.config.Items[m.llMenu.itemSelected]
 
-  m.top.crexScene.callFunc("ShowItem", item)
+  m.top.crexScene.callFunc("ShowItem", item.Action)
 end sub

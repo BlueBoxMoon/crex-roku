@@ -56,8 +56,9 @@ sub PlayVideo(startPosition = 0 as integer)
   rem -- Configure the new video content object.
   rem --
   m.vVideo.control = "stop"
+  uri = ParseJson(m.top.data)
   videoContent = createObject("roSGNode", "ContentNode")
-  videoContent.url = m.top.uri
+  videoContent.url = uri
   videoContent.streamformat = m.format
 
   rem --
@@ -65,7 +66,7 @@ sub PlayVideo(startPosition = 0 as integer)
   rem --
   m.gResume.visible = false
   m.vVideo.visible = true
-  if UCase(m.top.uri).Instr("YOURSTREAMLIVE.COM") <> -1
+  if UCase(uri).Instr("YOURSTREAMLIVE.COM") <> -1
     capath = m.config.CrexRoot + "yourstreamlive.crt"
     m.vVideo.SetCertificatesFile(capath)
   else
@@ -81,16 +82,17 @@ rem ** EVENT HANDLERS
 rem *******************************************************
 
 rem --
-rem -- onUriChange()
+rem -- onDataChange()
 rem --
-rem -- The URI for the video we are supposed to play has changed. Update
+rem -- The data for the video we are supposed to play has changed. Update
 rem -- the video object to play the new URI.
 rem --
-sub onUriChange()
+sub onDataChange()
   rem --
   rem -- Determine if this is an HLS or MP4 style video link.
   rem --
-  if UCase(m.top.uri).Instr("M3U8") <> -1 or Right(UCase(m.top.uri), 3) = "HLS"
+  uri = ParseJson(m.top.data)
+  if UCase(uri).Instr("M3U8") <> -1 or Right(UCase(uri), 3) = "HLS"
     m.format = "hls"
   else
     m.format = "mp4"
@@ -100,7 +102,7 @@ sub onUriChange()
   if lastVideoState <> invalid
     lastVideoUri = lastVideoState.Split("|")[0]
     lastVideoPosition = lastVideoState.Split("|")[1].ToInt()
-    if lastVideoUri = m.top.uri and lastVideoPosition > 0
+    if lastVideoUri = uri and lastVideoPosition > 0
       m.gResume.visible = true
       m.vVideo.visible = false
       return
@@ -172,7 +174,7 @@ rem --
 function onKeyEvent(key as string, press as boolean) as boolean
   if press = true and key = "back"
     if m.vVideo.duration > 60
-      lastVideoState = m.top.uri + "|" + Int(m.vVideo.position).ToStr()
+      lastVideoState = ParseJson(m.top.data) + "|" + Int(m.vVideo.position).ToStr()
       WriteCache(m, "lastVideoState", lastVideoState)
     end if
 

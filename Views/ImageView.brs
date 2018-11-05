@@ -27,11 +27,11 @@ rem ** EVENT HANDLERS
 rem *******************************************************
 
 rem --
-rem -- onUriChange()
+rem -- onDataChange()
 rem --
-rem -- Called when the URI has been changed to a new value. Update the
-rem -- image to use this new URI value.
+rem -- Called when the data has been changed to a new value. Update the
+rem -- image to use this new data value.
 rem --
-sub onUriChange()
-  m.pImage.uri = m.top.uri
+sub onDataChange()
+  m.pImage.uri = BestMatchingUrl(ParseJson(m.top.data))
 end sub

@@ -15,7 +15,7 @@
   </children>
 
   <interface>
-    <field id="uri" type="string" onChange="onUriChange" />
+    <field id="data" type="string" onChange="onDataChange" />
   </interface>
 
   <script type="text/brightscript" uri="VideoView.brs" />

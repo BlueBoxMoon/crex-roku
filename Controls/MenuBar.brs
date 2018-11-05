@@ -9,7 +9,9 @@ sub init()
   rem --
   rem -- Set initial control values.
   rem --
+  config = ReadCache(m, "config")
   m.gButtons = m.top.findNode("gButtons")
+  m.top.color = config.MenuBar.BackgroundColor
   m.selectedButtonIndex = invalid
 
   rem --
@@ -48,10 +50,9 @@ sub onButtonsChange()
     rem -- Create the button with explicit height matching our own height
     rem -- and a width of 0 to make it automatically size.
     rem --
-    c = m.gButtons.createChild("MenuButton")
-    c.width = 0
-    c.height = m.top.height
-    c.text = b
+    btn = m.gButtons.createChild("MenuButton")
+    btn.height = m.top.height
+    btn.text = b
 
     rem --
     rem -- Make sure the first button is selected.
@@ -79,9 +80,9 @@ sub onLayoutChange()
   rem --
   translationX = 0
   for i = 1 to m.gButtons.getChildCount() step 1
-    c = m.gButtons.getChild(i - 1)
-    c.translation = [translationX, 0]
-    translationX = translationX + c.boundingWidth + m.top.horizSpacing
+    btn = m.gButtons.getChild(i - 1)
+    btn.translation = [translationX, 0]
+    translationX = translationX + btn.boundingWidth + m.top.horizSpacing
   end for
 
   rem --
@@ -90,8 +91,8 @@ sub onLayoutChange()
   rem --
   offset = Int(m.top.width / 2) - Int((translationX - m.top.horizSpacing) / 2)
   for i = 1 to m.gButtons.getChildCount() step 1
-    c = m.gButtons.getChild(i - 1)
-    c.translation = [c.translation[0] + offset, c.translation[1]]
+    btn = m.gButtons.getChild(i - 1)
+    btn.translation = [btn.translation[0] + offset, btn.translation[1]]
   end for
 end sub
 

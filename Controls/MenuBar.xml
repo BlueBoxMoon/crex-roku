@@ -6,11 +6,12 @@
 
   <interface>
     <field id="buttons" type="stringarray" onChange="onButtonsChange" />
-    <field id="horizSpacing" type="integer" value="10" onChange="onLayoutChange" />
+    <field id="horizSpacing" type="integer" value="40" onChange="onLayoutChange" />
 
     <field id="selectedButton" type="node" />
     <field id="selectedButtonIndex" type="integer" alwaysNotify="true" />
   </interface>
 
   <script type="text/brightscript" uri="MenuBar.brs" />
+  <script type="text/brightscript" uri="../Libs/Utilities.brs" />
 </component>
