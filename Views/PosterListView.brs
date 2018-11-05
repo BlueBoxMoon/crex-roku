@@ -102,6 +102,7 @@ sub init()
   m.pBackgroundImage.observeField("loadStatus", "onBackgroundStatus")
   m.llMenu.observeField("itemFocused", "onItemFocusedChange")
   m.llMenu.observeField("itemSelected", "onItemSelectedChange")
+  m.aFadeSpinner.observeField("state", "onFadeSpinnerState")
 end sub
 
 rem *******************************************************
@@ -170,11 +171,7 @@ sub onContentChange()
       node.title = item.Title
     end for
 
-    rem --
-    rem -- Hide the loading spinner.
-    rem --
-    m.bsLoading.control = "stop"
-    m.bsLoading.visible = false
+    m.aFadeSpinner.control = "start"
   else
     LogMessage("Failed to load PosterList content")
   end if
@@ -198,6 +195,19 @@ sub onBackgroundStatus()
     m.pBackgroundImage.opacity = 0
     m.pBackgroundImage.visible = true
     m.aFadeBackground.control = "start"
+  end if
+end sub
+
+rem --
+rem -- onFadeSpinnerState()
+rem --
+rem -- The spinner fade animation has completed. Make sure the spinner
+rem -- is stopped and no longer visible at all.
+rem --
+sub onFadeSpinnerState()
+  if m.aFadeSpinner.state = "stopped"
+    m.bsLoading.control = "stop"
+    m.bsLoading.visible = false
   end if
 end sub
 

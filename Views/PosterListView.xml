@@ -2,7 +2,7 @@
 <component name="PosterListView" extends="BaseCrexView" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://devtools.web.roku.com/schema/RokuSceneGraph.xsd">
   <children>
     <Rectangle id="pBackgroundRect" color="0x323232FF" />
-    <Poster id="pBackgroundImage" opacity="0.25" loadDisplayMode="scaleToFill" />
+    <Poster id="pBackgroundImage" opacity="0.25" loadDisplayMode="scaleToFit" />
     <Label id="lTitle" horizAlign="center" font="font:LargeBoldSystemFont" />
     <Poster id="pItemImage" loadDisplayMode="scaleToFit" />
     <Label id="lItemDetailLeft" font="font:SmallestSystemFont" />
