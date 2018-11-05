@@ -2,7 +2,14 @@
 <component name="ImageView" extends="BaseCrexView" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://devtools.web.roku.com/schema/RokuSceneGraph.xsd">
   <children>
     <Rectangle id="rImage" color="0x121212FF" />
-    <Poster id="pImage" />
+    <Poster id="pBackgroundImage" loadDisplayMode="scaleToFit" />
+
+    <BusySpinner id="bsLoading" />
+
+    <Animation id="aFadeBackground" duration="0.25" repeat="false" easeFunction="linear">
+      <FloatFieldInterpolator id="aFadeBackgroundValue" key="[0.0, 1.0]" keyValue="[0, 1]" fieldToInterp="pBackgroundImage.opacity" />
+      <FloatFieldInterpolator id="aFadeSpinnerValue" key="[0.0, 1.0]" keyValue="[1, 0]" fieldToInterp="bsLoading.opacity" />
+    </Animation>
   </children>
 
   <interface>
