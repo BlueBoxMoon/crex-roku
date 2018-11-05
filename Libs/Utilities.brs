@@ -65,7 +65,7 @@ rem --
 rem -- @returns The path to the root Crex folder.
 rem --
 function GetCrexRoot()
-  return FindPathToFile("pkg:/", "crex.root.txt")
+  return FindPathToFile("pkg:/", "crex.version.txt")
 end function
 
 rem --
